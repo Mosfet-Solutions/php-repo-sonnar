@@ -26,5 +26,5 @@ jobs:
       
     - name: Run PHP linting and tests
       run: |
-        vendor/bin/phpcs --standard=PSR2 ./ -ignore=*/vendor/,*/tests/
+        vendor/bin/phpcs --standard=PSR2 ./
         
