@@ -1,10 +1,15 @@
 <?php
 require_once ROOT . '/service/GenericService.php';
 
-class PublicEndpoint {
+class PublicEndpoint
+{
 
-    /** Public access to read tables that start with public_ */
-    public static function findall() {
+    /**
+     * 
+     * Public access to read tables that start with public_ 
+     */
+    public static function findall()
+    {
         $connector = Utils::getParam('connector', true);
         $tableName = Utils::getParam('table', true);
         $start = intval(Utils::getParam('start') ?: 0);

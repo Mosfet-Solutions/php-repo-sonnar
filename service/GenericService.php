@@ -1,10 +1,15 @@
 <?php
 require_once ROOT . '/dbaccess/Connector.php';
 
-class GenericService {
+class GenericService
+{
 
-    /** connect to DB @param connector can be the string from connectors or already a connection */
-    private static function connect($connector, $tableName) {
+    /**
+     * 
+     * connect to DB @param connector can be the string from connectors or already a connection 
+     */
+    private static function connect($connector, $tableName)
+    {
         if (gettype($connector) === 'string') {
 
             // get connection
@@ -26,14 +31,15 @@ class GenericService {
 
     /**
      * @return subset [@param start - @param limit] of records from table @param tableName inside @param connector
-     * @param whereQuery example = "lastname = :lastname and age = :age"
-     * @param whereData example = "array("lastname" => "perez", "age" => 18)"
-     * @param sortQuery example = "id desc"
+     * @param  whereQuery example = "lastname = :lastname and age = :age"
+     * @param  whereData example = "array("lastname" => "perez", "age" => 18)"
+     * @param  sortQuery example = "id desc"
      * @throws 404 if invalid @param connector
      * @throws 404 if invalid @param tableName
      */
     public static function findAll($connector, $tableName, $start, $limit, $whereQuery = '', $whereData = null,
-            $sortQuery = null) {
+        $sortQuery = null
+    ) {
         $dbh = self::connect($connector, $tableName);
         $query1 = "select * from $tableName";
         $query2 = "select count(1) from $tableName";
@@ -74,7 +80,8 @@ class GenericService {
      *   user_agent => 'abcdefghijklmnopqrstuvwxyz'
      * }
      */
-    public static function insert($connector, $tableName, $data) {
+    public static function insert($connector, $tableName, $data)
+    {
         $dbh = self::connect($connector, $tableName);
         $query = 'insert into ' . $tableName . ' (' . implode(',', array_keys($data)) . ') ' .
                 'values (:' . implode(', :', array_keys($data)) . ')';
@@ -86,8 +93,12 @@ class GenericService {
         return $dbh->lastInsertId();
     }
 
-    /** Find a row by id or @throws 404 */
-    public static function getById($connector, $tableName, $id) {
+    /**
+     * 
+     * Find a row by id or @throws 404 
+     */
+    public static function getById($connector, $tableName, $id)
+    {
         $dbh = self::connect($connector, $tableName);
         $query = 'select * from ' . $tableName . ' where id = :id';
         $stmt = $dbh->prepare($query);
@@ -108,7 +119,8 @@ class GenericService {
      *   user_agent => 'abcdefghijklmnopqrstuvwxyz'
      * }
      */
-    public static function update($connector, $tableName, $id, $data) {
+    public static function update($connector, $tableName, $id, $data)
+    {
         $dbh = self::connect($connector, $tableName);
         $query = 'update ' . $tableName . ' set id = id';
         foreach (array_keys($data) as $column) {
@@ -124,7 +136,8 @@ class GenericService {
         return $stmt->rowCount();
     }
 
-    public static function deleteById($connector, $tableName, $id) {
+    public static function deleteById($connector, $tableName, $id)
+    {
         $dbh = self::connect($connector, $tableName);
         $query = 'delete from ' . $tableName . ' where id = :id';
         $stmt = $dbh->prepare($query);
@@ -133,7 +146,8 @@ class GenericService {
         return $stmt->rowCount();
     }
 
-    public static function deleteByWhere($connector, $tableName, $whereQuery, $whereData = null) {
+    public static function deleteByWhere($connector, $tableName, $whereQuery, $whereData = null)
+    {
         $dbh = self::connect($connector, $tableName);
         $query = "delete from $tableName where $whereQuery";
         $stmt = $dbh->prepare($query);

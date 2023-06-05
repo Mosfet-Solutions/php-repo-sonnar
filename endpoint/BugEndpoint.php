@@ -2,8 +2,10 @@
 require_once ROOT . '/service/BugService.php';
 require_once ROOT . '/service/GenericService.php';
 
-class BugEndpoint {
-    public static function search() {
+class BugEndpoint
+{
+    public static function search()
+    {
         $start = intval(Utils::getParam('start') ?: 0);
         $limit = intval(Utils::getParam('limit') ?: 999);
         $person = intval(Utils::getParam('person') ?: 0);
@@ -19,15 +21,18 @@ class BugEndpoint {
         return $data;
     }
 
-    public static function getbyid() {
+    public static function getbyid()
+    {
         $id = intval(Utils::getParam('id', true));
         $data = GenericService::getById('bugs', 'v_bug', $id);
         return $data;
     }
 
-    public static function register() {
+    public static function register()
+    {
         $json = Utils::getPayload();
-        $id = GenericService::insert('bugs', 'bug', array(
+        $id = GenericService::insert(
+            'bugs', 'bug', array(
             'title' => $json->title,
             'description' => $json->description,
             'id_assigned' => intval($json->id_assigned),
@@ -36,14 +41,17 @@ class BugEndpoint {
             'id_priority' => intval($json->id_priority),
             'id_project' => intval($json->id_project),
             'id_status' => intval($json->id_status)
-        ));
+            )
+        );
         return $id;
     }
 
-    public static function update() {
+    public static function update()
+    {
         $id = intval(Utils::getParam('id', true));
         $json = Utils::getPayload();
-        $updatedRows = GenericService::update('bugs', 'bug', $id, array(
+        $updatedRows = GenericService::update(
+            'bugs', 'bug', $id, array(
             'title' => $json->title,
             'description' => $json->description,
             'id_assigned' => intval($json->id_assigned),
@@ -51,11 +59,13 @@ class BugEndpoint {
             'id_priority' => intval($json->id_priority),
             'id_project' => intval($json->id_project),
             'id_status' => intval($json->id_status)
-        ));
+            )
+        );
         return $updatedRows;
     }
 
-    public static function getcombodata() {
+    public static function getcombodata()
+    {
         $start = intval(Utils::getParam('start') ?: 0);
         $limit = intval(Utils::getParam('limit') ?: 999);
         return GenericService::findAll('bugs', 'v_bug_combo', $start, $limit);

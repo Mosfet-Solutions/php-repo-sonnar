@@ -1,10 +1,12 @@
 <?php
 require_once ROOT . '/dbaccess/Connector.php';
 
-class BugService {
+class BugService
+{
 
     /**
      * Search for bugs with filters
+     *
      * @param start
      * @param limit
      * @param person
@@ -16,7 +18,8 @@ class BugService {
      * @param sortByUpdate
      */
     public static function search($start, $limit, $person, $priority, $status, $project, $type, $title, $showClosed,
-            $sortByUpdate) {
+        $sortByUpdate
+    ) {
         // assemble where
         $where = 'where 1 = 1';
         if ($person > 0) {
@@ -43,8 +46,10 @@ class BugService {
 
         // statements
         $dbh = Connector::getConnection('bugs');
-        $stmt1 = $dbh->prepare('select * from v_bug ' . $where . ' order by ' .
-                ($sortByUpdate === true ? 'tstamp' : 'id') . ' desc limit ' . $start . ', ' . $limit);
+        $stmt1 = $dbh->prepare(
+            'select * from v_bug ' . $where . ' order by ' .
+            ($sortByUpdate === true ? 'tstamp' : 'id') . ' desc limit ' . $start . ', ' . $limit
+        );
         $stmt2 = $dbh->prepare('select count(1) from v_bug ' . $where);
         
         // params

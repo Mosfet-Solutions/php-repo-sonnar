@@ -1,8 +1,10 @@
 <?php
 require_once ROOT . '/dbaccess/Connector.php';
 
-class PersonService {
-    public static function getFullByRfc($rfc) {
+class PersonService
+{
+    public static function getFullByRfc($rfc)
+    {
         $query = 'select * from v_bperson_full where rfc = :rfc';
         $dbh = Connector::getConnection('bugs');
         $stmt = $dbh->prepare($query);
@@ -15,7 +17,8 @@ class PersonService {
         return $data;
     }
 
-    public static function getFullById($id) {
+    public static function getFullById($id)
+    {
         $query = 'select * from v_bperson_full where id = :id';
         $dbh = Connector::getConnection('bugs');
         $stmt = $dbh->prepare($query);
@@ -28,7 +31,8 @@ class PersonService {
         return $data;
     }
 
-    public static function getById($id) {
+    public static function getById($id)
+    {
         $query = 'select * from bperson where id = :id';
         $dbh = Connector::getConnection('bugs');
         $stmt = $dbh->prepare($query);
@@ -43,7 +47,8 @@ class PersonService {
         return $data;
     }
 
-    public static function update($idToUpdate, $sessionUserId, $aboutMe, $photoUrl) {
+    public static function update($idToUpdate, $sessionUserId, $aboutMe, $photoUrl)
+    {
         $query = 'update bperson set about_me = :about_me, photo_url = :photo_url ' .
                 'where id = :id_to_update and id = :session_user_id';
         $dbh = Connector::getConnection('bugs');
@@ -56,7 +61,8 @@ class PersonService {
         return $stmt->rowCount();
     }
 
-    public static function finderSearch($name, $start, $limit) {
+    public static function finderSearch($name, $start, $limit)
+    {
         $query1 = 'select id, shortname person from bperson ' .
                 'where lower(name) like :token or lower(lastname) like :token or lower(shortname) like :token ' .
                 'order by shortname limit ' . intval($start) . ', ' . intval($limit);

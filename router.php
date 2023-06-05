@@ -46,16 +46,19 @@ require_once 'service/SecurityService.php';
 
 // unexpected errors management
 register_shutdown_function("shutdown_function");
-function shutdown_function() {
+function shutdown_function()
+{
     $error = error_get_last();
     if ($error) {
         header('Content-Type: application/json; charset=utf-8');
         http_response_code(500);
-        echo json_encode((object) array(
+        echo json_encode(
+            (object) array(
             'success' => false,
             'message' => 'internal server error',
             'exception' => var_export($error, true)
-        ));
+            )
+        );
     }
 }
 
@@ -72,7 +75,7 @@ try {
     $endpoint = ucfirst(strtolower($urlTokens[2])) . 'Endpoint';  // example => ExampleEndpoint
     $method = strtolower(explode('?', $urlTokens[3])[0]);  // clean GET params
     Utils::validate(file_exists("endpoint/$endpoint.php"), 'resource not found (1)', 404);
-    require_once "endpoint/$endpoint.php";
+    include_once "endpoint/$endpoint.php";
     Utils::validate(method_exists($endpoint, $method), 'resource not found (2)', 404);
 
     // URLs free of security
@@ -113,20 +116,24 @@ try {
     // b) Detailed data response = success + message + data (httpstatus = 200)
     // c) Minimal data response = ["juan", "maria"] (httpstatus = 200, success = true, message = '')
     header('Content-Type: application/json; charset=utf-8');
-    echo json_encode((object) array(
+    echo json_encode(
+        (object) array(
         'success' => true,
         'message' => '',
         'data' => $data
-    ));
+        )
+    );
 } catch (Exception $e) {
     if ($e instanceof AppException) {  // error management
         header('Content-Type: application/json; charset=utf-8');
         http_response_code($e->getCode() ?: 404);
-        echo json_encode((object) array(
+        echo json_encode(
+            (object) array(
             'success' => false,
             'message' => $e->getMessage(),
             'exception' => var_export($e, true)
-        ));
+            )
+        );
     } else {
         throw $e;
     }

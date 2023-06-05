@@ -2,8 +2,10 @@
 require_once ROOT . '/dbaccess/Connector.php';
 require_once ROOT . '/service/GenericService.php';
 
-class SecurityService {
-    public static function access($userId, $password, $userAgent) {
+class SecurityService
+{
+    public static function access($userId, $password, $userAgent)
+    {
 
         // check credentials
         $dbh = Connector::getConnection('bugs');
@@ -29,10 +31,12 @@ class SecurityService {
         $stmt->execute();
 
         // insert new access
-        $accessTokenId = GenericService::insert('bugs', 'accesstoken', array(
+        $accessTokenId = GenericService::insert(
+            'bugs', 'accesstoken', array(
             'id_user' => $userId,
             'client_fingerprint' => $clientFingerprint
-        ));
+            )
+        );
         $token = md5('_token#' . $accessTokenId);
         $data['token'] = $token;
 
@@ -46,8 +50,12 @@ class SecurityService {
         return $data;
     }
 
-    /** validate token or @throws 401 unauthorized */
-    public static function validateToken($sessionUserId, $sessionUserToken, $userAgent) {
+    /**
+     * 
+     * validate token or @throws 401 unauthorized 
+     */
+    public static function validateToken($sessionUserId, $sessionUserToken, $userAgent)
+    {
 
         // check if exists
         Utils::validate($sessionUserId && $sessionUserToken && $userAgent, 'unauthorized', 401);
@@ -71,8 +79,12 @@ class SecurityService {
         $stmt->execute();
     }
 
-    /** validate user is system admin or @throws 403 forbidden */
-    public static function validateSessionUserIsSystemAdmin($sessionUserId) {
+    /**
+     * 
+     * validate user is system admin or @throws 403 forbidden 
+     */
+    public static function validateSessionUserIsSystemAdmin($sessionUserId)
+    {
         $user = GenericService::getById('bugs', 'bperson', $sessionUserId);
         Utils::validate(intval($user['is_system_admin']) === 1, 'forbidden', 403);
     }

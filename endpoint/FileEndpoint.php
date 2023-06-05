@@ -1,8 +1,10 @@
 <?php
 require_once ROOT . '/service/GenericService.php';
 
-class FileEndpoint {
-    public static function upload() {
+class FileEndpoint
+{
+    public static function upload()
+    {
 
         // validate input
         if (!(isset($_FILES) && isset($_FILES['fileToUpload']) && isset($_POST) && strlen($_POST['name']) > 0)) {
@@ -12,7 +14,8 @@ class FileEndpoint {
         // validate type
         $imageFileType = strtolower(pathinfo(basename($_FILES['fileToUpload']["name"]), PATHINFO_EXTENSION));
         if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-                && $imageFileType != "gif" ) {
+            && $imageFileType != "gif" 
+        ) {
             Utils::exception("Only JPG, JPEG, PNG & GIF files are allowed", 400);
         }
 
@@ -49,14 +52,17 @@ class FileEndpoint {
         }
 
         // insert record
-        GenericService::insert('bugs', 'file', array(
+        GenericService::insert(
+            'bugs', 'file', array(
             'name' => "$name.$imageFileType"
-        ));
+            )
+        );
 
         echo "{\"success\":true, \"name\":\"$name.$imageFileType\",\"message\":\"Please return and refresh to see the link\"}";
     }
 
-    public static function edit() {
+    public static function edit()
+    {
 
         // validate input
         if (!(isset($_FILES) && isset($_FILES['fileToUpload']) && isset($_POST) && strlen($_POST['name']) > 0)) {
@@ -66,7 +72,8 @@ class FileEndpoint {
         // validate type
         $imageFileType = strtolower(pathinfo(basename($_FILES['fileToUpload']["name"]), PATHINFO_EXTENSION));
         if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-                && $imageFileType != "gif" ) {
+            && $imageFileType != "gif" 
+        ) {
             Utils::exception("Only JPG, JPEG, PNG & GIF files are allowed", 400);
         }
 
@@ -99,7 +106,7 @@ class FileEndpoint {
 
         
         // remove previous file
-        chmod($target_file,0755);
+        chmod($target_file, 0755);
         if (unlink($target_file)) {
             // move file
             if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
@@ -112,7 +119,8 @@ class FileEndpoint {
         echo "{\"success\":true, \"name\":\"$name.$imageFileType\",\"message\":\"Image updated! Please return and refresh to see the link\"}";
     }
 
-    public static function get() {
+    public static function get()
+    {
         $start = intval(Utils::getParam('start') ?: 0);
         $limit = intval(Utils::getParam('limit') ?: 999);
         return GenericService::findAll('bugs', 'file', $start, $limit, '', null, 'id desc');

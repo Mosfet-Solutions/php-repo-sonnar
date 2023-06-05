@@ -1,17 +1,26 @@
 <?php
 require_once ROOT . '/service/GenericService.php';
 
-class CatalogEndpoint {
+class CatalogEndpoint
+{
     
-    /** ...getcatalogs?start=1&limit=1 */
-    public static function getcatalogs() {
+    /**
+     * 
+     * ...getcatalogs?start=1&limit=1 
+     */
+    public static function getcatalogs()
+    {
         $start = intval(Utils::getParam('start') ?: 0);
         $limit = intval(Utils::getParam('limit') ?: 999);
         return GenericService::findAll('bugs', 'v_catalogs', $start, $limit);
     }
 
-    /** ...getcatalogvalues?catalog=string&start=1&limit=1 */
-    public static function getcatalogvalues() {
+    /**
+     * 
+     * ...getcatalogvalues?catalog=string&start=1&limit=1 
+     */
+    public static function getcatalogvalues()
+    {
         $catalog = Utils::getParam('catalog', true);
         $start = intval(Utils::getParam('start') ?: 0);
         $limit = intval(Utils::getParam('limit') ?: 999);
@@ -23,7 +32,8 @@ class CatalogEndpoint {
      * url: ...updatecatalogentry?id=1
      * payload: { catalog: 'string', value: 'string', detail: 'string' }
      */
-    public static function updatecatalogentry() {
+    public static function updatecatalogentry()
+    {
         $id = intval(Utils::getParam('id', true));
         $json = Utils::getPayload();
         Utils::validate(isset($json->catalog) && $json->catalog, 'Missing [catalog] in the body', 400);
@@ -41,8 +51,12 @@ class CatalogEndpoint {
         return GenericService::update('bugs', $json->catalog, $id, $dataArray);
     }
 
-    /** ...deletecatalogentry?catalog=string&id=1 */
-    public static function deletecatalogentry() {
+    /**
+     * 
+     * ...deletecatalogentry?catalog=string&id=1 
+     */
+    public static function deletecatalogentry()
+    {
         $catalog = Utils::getParam('catalog', true);
         $id = intval(Utils::getParam('id', true));
         Utils::validate(strpos($catalog, 'cat_') === 0, 'Invalid catalog', 404);
@@ -53,7 +67,8 @@ class CatalogEndpoint {
      * url: ...insertcatalogentry?catalog=string
      * payload: { value: 'string', detail: 'string' }
      */
-    public static function insertcatalogentry() {
+    public static function insertcatalogentry()
+    {
         $catalog = Utils::getParam('catalog', true);
         $json = Utils::getPayload();
         Utils::validate(strpos($catalog, 'cat_') === 0, 'Invalid catalog', 404);

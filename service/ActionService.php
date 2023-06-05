@@ -1,8 +1,10 @@
 <?php
 require_once ROOT . '/dbaccess/Connector.php';
 
-class ActionService {
-    public static function getCount($event, $context) {
+class ActionService
+{
+    public static function getCount($event, $context)
+    {
         $query = 'select count(1) from baction where event = :event and context = :context';
         $dbh = Connector::getConnection('bugs');
         $stmt = $dbh->prepare($query);
@@ -13,7 +15,8 @@ class ActionService {
         return $count;
     }
 
-    public static function getIdByContent($event, $context, $userId) {
+    public static function getIdByContent($event, $context, $userId)
+    {
         $query = 'select id from baction where event = :event and context = :context and id_user = :userId';
         $dbh = Connector::getConnection('bugs');
         $stmt = $dbh->prepare($query);
