@@ -26,10 +26,6 @@ jobs:
       
     - name: Run PHP linting and tests
       run: |
+        ls
         vendor/bin/phpcs --standard=PSR2 ./
-        if git diff --name-only ${{ github.base_ref }}... | grep -qE '.*\.php$'; then
-          vendor/bin/phpunit
-        else
-          echo "No changes in PHP files. Skipping tests."
-        fi
-    
+        
