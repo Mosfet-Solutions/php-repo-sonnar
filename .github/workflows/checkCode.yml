@@ -21,15 +21,15 @@ jobs:
     - name: Install JavaScript dependencies
       run: npm ci
 
-     - name: Install PHP dependencies
-          run: composer install
+    - name: Install PHP dependencies
+      run: composer install
       
-        - name: Run PHP linting and tests
-          run: |
-            vendor/bin/phpcs --standard=PSR2 src/
-            if git diff --name-only ${{ github.base_ref }}... | grep -qE '.*\.php$'; then
-              vendor/bin/phpunit
-            else
-              echo "No changes in PHP files. Skipping tests."
-            fi
+    - name: Run PHP linting and tests
+      run: |
+        vendor/bin/phpcs --standard=PSR2 src/
+        if git diff --name-only ${{ github.base_ref }}... | grep -qE '.*\.php$'; then
+          vendor/bin/phpunit
+        else
+          echo "No changes in PHP files. Skipping tests."
+        fi
     
